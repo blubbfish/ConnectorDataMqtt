@@ -35,11 +35,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Librarys\mqtt\M2Mqtt\M2Mqtt_4.7.1.csproj">
+    <ProjectReference Include="..\..\..\Librarys\mqtt\M2Mqtt\M2Mqtt_4.7.1.csproj">
       <Project>{a11aef5a-b246-4fe8-8330-06db73cc8074}</Project>
       <Name>M2Mqtt_4.7.1</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Utils-IoT.csproj">
+    <ProjectReference Include="..\..\Utils-IoT\Utils-IoT\Utils-IoT.csproj">
       <Project>{b870e4d5-6806-4a0b-b233-8907eedc5afc}</Project>
       <Name>Utils-IoT</Name>
     </ProjectReference>
