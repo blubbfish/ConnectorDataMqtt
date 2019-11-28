@@ -35,6 +35,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\CONTRIBUTING.md" />
+    <Content Include="..\LICENSE" />
+    <Content Include="..\README.md" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Librarys\mqtt\M2Mqtt\M2Mqtt_4.7.1.csproj">
       <Project>{a11aef5a-b246-4fe8-8330-06db73cc8074}</Project>
       <Name>M2Mqtt_4.7.1</Name>

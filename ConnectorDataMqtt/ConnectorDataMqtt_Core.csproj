@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>BlubbFish.Utils.IoT.Connector.Data</RootNamespace>
+    <AssemblyName>ConnectorDataMqtt</AssemblyName>
+    <Company>BlubbFish</Company>
+    <Authors>BlubbFish</Authors>
+    <Version>1.1.0</Version>
+    <Copyright>Copyright © BlubbFish 2017 - 27.05.2019</Copyright>
+    <Description>ADataBackend Connector that connects to mqtt using M2Mqtt</Description>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>http://git.blubbfish.net/vs_utils/ConnectorDataMqtt</PackageProjectUrl>
+    <RepositoryUrl>http://git.blubbfish.net/vs_utils/ConnectorDataMqtt.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>1.1.0 Rewrite Module to reconnect itselfs, so you dont need to watch over the the state of the connection</PackageReleaseNotes>
+    <NeutralLanguage>de-DE</NeutralLanguage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Librarys\mqtt\M2Mqtt\M2Mqtt_Core.csproj" />
+    <ProjectReference Include="..\..\Utils-IoT\Utils-IoT\Utils-IoT_Core.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+	<Content Include="../CONTRIBUTING.md" />
+	<Content Include="../LICENSE" />
+	<Content Include="../README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

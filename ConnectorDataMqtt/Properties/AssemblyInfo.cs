@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿#if !NETCOREAPP
+using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
@@ -10,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("BlubbFish")]
 [assembly: AssemblyProduct("ConnectorDataMqtt")]
-[assembly: AssemblyCopyright("Copyright ©  2017 - 27.05.2019")]
+[assembly: AssemblyCopyright("Copyright © BlubbFish 2017 - 27.05.2019")]
 [assembly: AssemblyTrademark("© BlubbFish")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("de-DE")]
@@ -35,6 +36,7 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.1.0")]
 [assembly: AssemblyFileVersion("1.1.0")]
+#endif
 
 /*
  * 1.1.0 Rewrite Module to reconnect itselfs, so you dont need to watch over the the state of the connection

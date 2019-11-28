@@ -61,23 +61,17 @@ namespace BlubbFish.Utils.IoT.Connector.Data {
     private void Connect() {
       Console.WriteLine("BlubbFish.Utils.IoT.Connector.Data.Mqtt.Connect()");
       this.client.MqttMsgPublishReceived += this.Client_MqttMsgPublishReceived;
-      if (this.settings.ContainsKey("user") && this.settings.ContainsKey("pass")) {
-        this.client.Connect(Guid.NewGuid().ToString(), this.settings["user"], this.settings["pass"]);
-      } else {
-        this.client.Connect(Guid.NewGuid().ToString());
-      }
+      _ = this.settings.ContainsKey("user") && this.settings.ContainsKey("pass")
+        ? this.client.Connect(Guid.NewGuid().ToString(), this.settings["user"], this.settings["pass"])
+        : this.client.Connect(Guid.NewGuid().ToString());
       this.Subscripe();
     }
     #endregion
 
     #region Subscription
-    private void Unsubscripe() {
-      if(this.settings.ContainsKey("topic")) {
-        this.client.Unsubscribe(this.settings["topic"].Split(';'));
-      } else {
-        this.client.Unsubscribe(new String[] { "#" });
-      }
-    }
+    private void Unsubscripe() => _ = this.settings.ContainsKey("topic")
+        ? this.client.Unsubscribe(this.settings["topic"].Split(';'))
+        : this.client.Unsubscribe(new String[] { "#" });
 
     private void Subscripe() {
       if(this.settings.ContainsKey("topic")) {
@@ -86,34 +80,29 @@ namespace BlubbFish.Utils.IoT.Connector.Data {
         for(Int32 i = 0; i < qos.Length; i++) {
           qos[i] = MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE;
         }
-        this.client.Subscribe(this.settings["topic"].Split(';'), qos);
+        _ = this.client.Subscribe(this.settings["topic"].Split(';'), qos);
       } else {
-        this.client.Subscribe(new String[] { "#" }, new Byte[] { MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE });
+        _ = this.client.Subscribe(new String[] { "#" }, new Byte[] { MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE });
       }
     }
     #endregion
 
-    private async void Client_MqttMsgPublishReceived(Object sender, MqttMsgPublishEventArgs e) => await Task.Run(() => {
-      this.NotifyClientIncomming(new DataEvent(Encoding.UTF8.GetString(e.Message), e.Topic, DateTime.Now));
-    });
+    private async void Client_MqttMsgPublishReceived(Object sender, MqttMsgPublishEventArgs e) => await Task.Run(() => this.NotifyClientIncomming(new DataEvent(Encoding.UTF8.GetString(e.Message), e.Topic, DateTime.Now)));
 
     public override void Send(String topic, String data) {
-      this.client.Publish(topic, Encoding.UTF8.GetBytes(data));
+      _ = this.client.Publish(topic, Encoding.UTF8.GetBytes(data));
       this.NotifyClientSending(new DataEvent(data, topic, DateTime.Now));
+    }
+
+    public void Send(String topic, Byte[] data) {
+      _ = this.client.Publish(topic, data);
+      this.NotifyClientSending(new DataEvent(Encoding.UTF8.GetString(data), topic, DateTime.Now));
     }
 
     #region IDisposable Support
     private Boolean disposedValue = false;
 
-    public override Boolean IsConnected {
-      get {
-        if(this.client != null) {
-          return this.client.IsConnected;
-        } else {
-          return false;
-        }
-      }
-    }
+    public override Boolean IsConnected => this.client != null ? this.client.IsConnected : false;
 
     protected virtual void Dispose(Boolean disposing) {
       if(!this.disposedValue) {
