@@ -15,6 +15,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>1.1.0 Rewrite Module to reconnect itselfs, so you dont need to watch over the the state of the connection</PackageReleaseNotes>
     <NeutralLanguage>de-DE</NeutralLanguage>
+    <PackageId>Mqtt.Data.Connector.IoT.Utils.BlubbFish</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
