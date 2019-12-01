@@ -11,9 +11,10 @@ namespace BlubbFish.Utils.IoT.Connector.Data {
   public class Mqtt : ADataBackend, IDisposable {
     private MqttClient client;
     private Thread connectionWatcher;
+    private Boolean connectionWatcherRunning;
 
     public Mqtt(Dictionary<String, String> settings) : base(settings) {
-      Console.WriteLine("ConnectorDataMqtt_constr("+this.ToString()+")");
+      Console.WriteLine("BlubbFish.Utils.IoT.Connector.Data.Mqtt(" + this.ToString()+")");
       Int32 port = 1883;
       if(this.settings.ContainsKey("port")) {
         port = Int32.Parse(this.settings["port"]);
@@ -44,22 +45,23 @@ namespace BlubbFish.Utils.IoT.Connector.Data {
     #region ConectionManage
     private void ConnectionWatcher() {
       this.connectionWatcher = new Thread(this.ConnectionWatcherRunner);
+      this.connectionWatcherRunning = true;
       this.connectionWatcher.Start();
     }
 
     private void ConnectionWatcherRunner() {
-      while(true) {
+      while(this.connectionWatcherRunning) {
         try {
           if(!this.IsConnected) {
             this.Reconnect();
+            Thread.Sleep(1000);
           }
-          Thread.Sleep(500);
+          Thread.Sleep(10);
         } catch(Exception) { }
       }
     }
 
     private void Reconnect() {
-      Console.WriteLine("ConnectorDataMqtt_Reconnect(" + this.ToString() + ")");
       if(this.IsConnected) {
         this.Disconnect(true);
       } else {
@@ -69,7 +71,7 @@ namespace BlubbFish.Utils.IoT.Connector.Data {
     }
 
     private void Disconnect(Boolean complete) {
-      Console.WriteLine("ConnectorDataMqtt_Disconnect(" + this.ToString() + ")");
+      Console.WriteLine("BlubbFish.Utils.IoT.Connector.Data.Disconnect(" + this.ToString() + ")");
       this.client.MqttMsgPublishReceived -= this.Client_MqttMsgPublishReceived;
       this.Unsubscripe();
       if(complete) {
@@ -78,7 +80,7 @@ namespace BlubbFish.Utils.IoT.Connector.Data {
     }
 
     private void Connect() {
-      Console.WriteLine("ConnectorDataMqtt_Connect(" + this.ToString() + ")");
+      Console.WriteLine("BlubbFish.Utils.IoT.Connector.Data.Connect(" + this.ToString() + ")");
       this.client.MqttMsgPublishReceived += this.Client_MqttMsgPublishReceived;
       _ = this.settings.ContainsKey("user") && this.settings.ContainsKey("pass")
         ? this.client.Connect(Guid.NewGuid().ToString(), this.settings["user"], this.settings["pass"])
@@ -127,7 +129,10 @@ namespace BlubbFish.Utils.IoT.Connector.Data {
       if(!this.disposedValue) {
         if(disposing) {
           try {
-            this.connectionWatcher.Abort();
+            this.connectionWatcherRunning = false;
+            while(this.connectionWatcher.IsAlive) {
+              Thread.Sleep(10);
+            }
             this.connectionWatcher = null;
             this.Disconnect(true);
           } catch (Exception) { }
