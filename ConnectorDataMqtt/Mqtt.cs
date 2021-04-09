@@ -123,14 +123,14 @@ namespace BlubbFish.Utils.IoT.Connector.Data {
     #region IDisposable Support
     private Boolean disposedValue = false;
 
-    public override Boolean IsConnected => this.client != null ? this.client.IsConnected : false;
+    public override Boolean IsConnected => this.client != null && this.client.IsConnected;
 
     protected virtual void Dispose(Boolean disposing) {
       if(!this.disposedValue) {
         if(disposing) {
           try {
             this.connectionWatcherRunning = false;
-            while(this.connectionWatcher.IsAlive) {
+            while(this.connectionWatcher != null && this.connectionWatcher.IsAlive) {
               Thread.Sleep(10);
             }
             this.connectionWatcher = null;
