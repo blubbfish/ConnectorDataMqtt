@@ -12,6 +12,7 @@ namespace BlubbFish.Utils.IoT.Connector.Data {
     private MqttClient client;
     private Thread connectionWatcher;
     private Boolean connectionWatcherRunning;
+    private Boolean firstStart = true;
 
     public Mqtt(Dictionary<String, String> settings) : base(settings) {
       Console.WriteLine("BlubbFish.Utils.IoT.Connector.Data.Mqtt(" + this.ToString()+")");
@@ -62,10 +63,14 @@ namespace BlubbFish.Utils.IoT.Connector.Data {
     }
 
     private void Reconnect() {
-      if(this.IsConnected) {
-        this.Disconnect(true);
+      if(!this.firstStart) {
+        if(this.IsConnected) {
+          this.Disconnect(true);
+        } else {
+          this.Disconnect(false);
+        }
       } else {
-        this.Disconnect(false);
+        this.firstStart = false;
       }
       this.Connect();
     }
